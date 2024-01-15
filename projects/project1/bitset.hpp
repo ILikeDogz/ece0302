@@ -7,28 +7,28 @@
 class Bitset{
 public:
 
-  // TODO COMMENT
+  // default constructor
   Bitset();
 
-  // TODO COMMENT
+  // constructor with size input
   Bitset(intmax_t size);
 
-  // TODO COMMENT
+  // consntructor with string input
   Bitset(const std::string & value);
 
-  // TODO COMMENT
+  // default destructor to delete any dynamic memory
   ~Bitset();
 
   Bitset(const Bitset & ) = delete;
   Bitset & operator=(const Bitset &) = delete;
 
-  // TODO COMMENT
+  // method to get the size
   intmax_t size() const;
 
-  // TODO COMMENT
+  // method to confirm is valid or invalid
   bool good() const;
 
-  // TODO COMMENT
+  //set value to 1 at index
   void set(intmax_t index);
 
   // TODO COMMENT
@@ -44,8 +44,9 @@ public:
   std::string asString() const;
 
 private:
-
-  // TODO
+  uint8_t *array_bitset; //the bitset array
+  intmax_t size_bitset; //size of bitset
+  bool valid_bitset; //check if valid
 };
 
 #endif
