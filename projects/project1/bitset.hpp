@@ -31,14 +31,14 @@ public:
   //set value to 1 at index
   void set(intmax_t index);
 
-  // TODO COMMENT
+  //set value to 0 at index
   void reset(intmax_t index);
 
-  // TODO COMMENT
+  //toggle the bit
   void toggle(intmax_t index);
 
-  // TODO COMMENT
-  bool test(intmax_t index);
+  //checking if 1 is present at index
+  bool test(int index);
 
   // TODO COMMENT
   std::string asString() const;
