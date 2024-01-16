@@ -2,11 +2,15 @@
 #include <cstring>
 #include <cmath>
 #define size_of_element 8
-//1 uint8_t = 8 bits, int ((N-1)/8 + 1)
-//the bitset array is similar to a 2d array, with one axis being the byte position, and the other axis being the bit position
+/* 1 uint8_t = 8 bits, int ((N-1)/8 + 1)
+the bitset array is similar to a 2d array, with one axis being the byte position, and the other axis being the bit position */
 Bitset::Bitset() {
-    valid_bitset = true; //size is greater than 0, therefore valid
-    size_bitset = 8; //default size is 8
+     //size is greater than 0, therefore valid
+    valid_bitset = true;
+
+    //default size is 8
+    size_bitset = 8;
+
     intmax_t element_count = ((size_bitset - 1)/size_of_element) + 1; //bit to byte
     
     //allocate dynamic memory
@@ -17,16 +21,20 @@ Bitset::Bitset() {
 
 Bitset::Bitset(intmax_t size) {
     if (size <= 0){
-        valid_bitset = false; //N <=0 is invalid, if invalid don't bother with bitset
+        //N <=0 is invalid, if invalid don't bother with bitset
+        valid_bitset = false; 
     } else {
         valid_bitset = true;
         size_bitset = size;
-        intmax_t element_count = ((size_bitset - 1)/size_of_element) + 1; //bit to byte
+
+        //bit to byte
+        intmax_t element_count = ((size_bitset - 1)/size_of_element) + 1; 
     
         //allocate dynamic memory
         array_bitset = new uint8_t[element_count]; 
 
- 	    memset(array_bitset, 0, sizeof(array_bitset[0])* element_count); //from the cstring library, fills array with 0;
+         //from the cstring library, fills array with 0;
+ 	    memset(array_bitset, 0, sizeof(array_bitset[0])* element_count);
     }
 }
 
@@ -35,20 +43,28 @@ Bitset::Bitset(const std::string & value) {
     //set valid initially
     valid_bitset = true;
     size_bitset = value.length();
-    intmax_t element_count = ((size_bitset - 1)/size_of_element) + 1; //bit to byte
+
+    //bit to byte
+    intmax_t element_count = ((size_bitset - 1)/size_of_element) + 1; 
 
     //allocate dynamic memory
     array_bitset = new uint8_t[element_count]; 
 
-    memset(array_bitset, 0, sizeof(array_bitset[0]) * element_count); //from the cstring library, fills array with 0;
-	int byte_position = 0; //position of the array, the array is an array of bytes (8 bits)
-    for (int bit_position = 0; bit_position < size_bitset; bit_position++){
-        byte_position = bit_position/size_of_element; //calculate the position relative to the bit position
+    //from the cstring library, fills array with 0
+    memset(array_bitset, 0, sizeof(array_bitset[0]) * element_count); 
 
-		int zero_or_one = (value[bit_position] - '0'); //convert from string char to int
+    //position of the array, the array is an array of bytes (8 bits)
+	int byte_position = 0; 
+    for (int bit_position = 0; bit_position < size_bitset; bit_position++){
+        //calculate the position relative to the bit position
+        byte_position = bit_position/size_of_element; 
+        
+        //convert from string char to int
+		int zero_or_one = (value[bit_position] - '0'); 
         if (zero_or_one != 0 && zero_or_one != 1){
             valid_bitset = false;
-            continue; //skips it, leaving it at zero
+            //skips it, leaving it at zero
+            continue; 
         }
 		array_bitset[byte_position] |= (zero_or_one << (bit_position % size_of_element));  
         // Set the bit at the correct byte and bit position using shift and bitwise or
@@ -72,7 +88,9 @@ bool Bitset::good() const{
 
 //set value to 1 at index
 void Bitset::set(intmax_t index){
-	intmax_t element_count = ((size() - 1)/size_of_element) + 1; //converts length from bits to bytes
+
+    //converts length from bits to bytes
+	intmax_t element_count = ((size() - 1)/size_of_element) + 1; 
 	if (index > size()-1 || index < 0){
 		valid_bitset = false;
 	}
@@ -84,24 +102,28 @@ void Bitset::set(intmax_t index){
 
 //set value to 0 at index
 void Bitset::reset(intmax_t index){
-    intmax_t element_count = ((size() - 1)/size_of_element) + 1; //converts length from bits to bytes
+    //converts length from bits to bytes
+    intmax_t element_count = ((size() - 1)/size_of_element) + 1; 
 	if (index > size()-1 || index < 0){
 		valid_bitset = false;
 	}
 	int bit_position = index;
-	int byte_position = bit_position/size_of_element; //bit to byte
+    //bit to byte
+	int byte_position = bit_position/size_of_element; 
 	array_bitset[byte_position] &= ~(1 << (bit_position % size_of_element));
     //invert and to insert a 0 at the correct position
 }
 
 //toggle the bit
 void Bitset::toggle(intmax_t index){
-    intmax_t element_count = ((size() - 1)/size_of_element) + 1; //converts length from bits to bytes
+    //converts length from bits to bytes
+    intmax_t element_count = ((size() - 1)/size_of_element) + 1; 
 	if (index > size()-1 || index < 0){
 		valid_bitset = false;
 	}
 	int bit_position = index;
-	int byte_position = bit_position/size_of_element; //bit to byte
+    //bit to byte
+	int byte_position = bit_position/size_of_element; 
 	array_bitset[byte_position] ^= (1 << (bit_position % size_of_element));        
     // Using xor to toggle
 }
@@ -124,7 +146,8 @@ std::string Bitset::asString() const{
     //assume this is valid
     std::string my_string;
     for (int i = 0; i < size(); i++){
-        if((array_bitset[i/size_of_element] & (1 << (i % size_of_element)) ) / pow(2, i % size_of_element)){ //using same function to check if 0 or 1
+        //using same function to check if 0 or 1
+        if((array_bitset[i/size_of_element] & (1 << (i % size_of_element)) ) / pow(2, i % size_of_element)){ 
             my_string += '1';
         } else{
             my_string += '0';
