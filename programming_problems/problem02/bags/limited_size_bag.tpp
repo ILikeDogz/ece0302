@@ -4,7 +4,6 @@
 template<typename T>
 LimitedSizeBag<T>::LimitedSizeBag() {
   bag_size = 0;
-  T my_bag[maxsize];
 }
   
 // add an item to the bag
@@ -15,6 +14,7 @@ bool LimitedSizeBag<T>::add(const T& item)
   if(typeid(T) != typeid(*my_bag) || getCurrentSize() == maxsize){
     return false;
   }
+  //set item, increment size
   *(my_bag+bag_size) = item; 
   bag_size++;
   return true;
@@ -32,6 +32,7 @@ bool LimitedSizeBag<T>::remove(const T& item)
   //only removing one, so index is minus 2
   int j = bag_size-2;
   bool first_instance = true;
+  //locates first instance of the item, and doesn't add it to the temp array
   for(int i = bag_size-1; i >= 0; i--){
     if(my_bag[i] == item && first_instance == true){
       first_instance = false;
@@ -40,6 +41,7 @@ bool LimitedSizeBag<T>::remove(const T& item)
       j--;
     }
   }
+  //copy temp array
   for(int i = 0; i < bag_size; i++){
     *(my_bag+i) = *(temp + i);
   }

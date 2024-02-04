@@ -65,6 +65,7 @@ bool DynamicBag<T>::remove(const T& item)
   //only removing one, so index is minus 2, as starting from the top, main index is already -1
   int j = bag_size-2;
   bool first_instance = true;
+  //locates first instance of item and doesn't add it to temp array
   for(int i = bag_size-1; i >= 0; i--){
     if(my_bag[i] == item && first_instance == true){
       first_instance = false;
@@ -73,7 +74,7 @@ bool DynamicBag<T>::remove(const T& item)
       j--;
     }
   }
-  //reallocate and decrement size
+  //reallocate and decrement size, and copy temp to my_bag
   my_bag = (T*) realloc(my_bag, --bag_size * sizeof(T));
   std::memcpy(my_bag, temp, bag_size * sizeof(T));
   free(temp);
@@ -101,6 +102,7 @@ bool DynamicBag<T>::contains(const T& item) const
   if (isEmpty()){
     return false;
   }
+  //checks if item exists
   for(int i = 0; i < bag_size; i++){
     if(my_bag[i] == item){
       return true;
@@ -122,6 +124,7 @@ void DynamicBag<T>::clear(){
 template<typename T>
 std::size_t DynamicBag<T>::getFrequencyOf(const T & item) const
 {
+  //increments depending on how many times item shows up
   std::size_t amount = 0;
   for(int i = 0; i < bag_size; i++){
     if(my_bag[i] == item){
