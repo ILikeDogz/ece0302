@@ -42,10 +42,6 @@ void DynamicBag<T>::swap(DynamicBag<T>& x){
 template<typename T>
 bool DynamicBag<T>::add(const T& item)
 {
-  //require type match
-  if(typeid(T) != typeid(*my_bag)){
-    return false;
-  }
   //reallocate and increment size, contents remain unchanged inside the bag
   my_bag = (T*) realloc(my_bag, ++bag_size * sizeof(T));
   *(my_bag+bag_size-1) = item; 
@@ -56,8 +52,8 @@ bool DynamicBag<T>::add(const T& item)
 template<typename T>
 bool DynamicBag<T>::remove(const T& item)
 {
-  //require type match, also can't remove from an empty bag and should contain said item
-  if(typeid(T) != typeid(*my_bag) || isEmpty() || !contains(item)){
+  //can't remove from an empty bag and should contain said item
+  if(isEmpty() || !contains(item)){
     return false;
   }
   T* temp = (T*) malloc((bag_size-1)*sizeof(T));
