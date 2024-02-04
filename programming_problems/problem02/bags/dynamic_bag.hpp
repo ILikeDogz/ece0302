@@ -17,7 +17,7 @@ public:
   ~DynamicBag();
   
   // copy assignment
-  DynamicBag& operator=(DynamicBag &x);
+  DynamicBag& operator=(DynamicBag x);
 
   // swap for copy swap idiom
   void swap(DynamicBag& x);
@@ -46,7 +46,6 @@ public:
 private:
   T *my_bag;
   std::size_t bag_size;
-  // TODO
 };
 
 #include "dynamic_bag.tpp"

@@ -25,34 +25,17 @@ DynamicBag<T>::~DynamicBag(){
   
 //copy assignment
 template<typename T>
-DynamicBag<T>& DynamicBag<T>::operator=(DynamicBag<T> &x)
+DynamicBag<T>& DynamicBag<T>::operator=(DynamicBag<T> x)
 {  
-  if (this != &x) {
-  bag_size = x.bag_size;
-
-  //reallocate the size, as bag_size could be different
-  my_bag = (T*) realloc(my_bag, bag_size * sizeof(T));
-
-  std::memcpy(my_bag, x.my_bag, bag_size * sizeof(T));
-  }
+  swap(x);
   return *this;
 }
 
 // swap for copy swap idiom
 template<typename T>
 void DynamicBag<T>::swap(DynamicBag<T>& x){
-  //bag sizes may be different, so after size is swapped, the memory is reallocated for the new size
-  T temp_size = bag_size;
-  T temp[bag_size];
-  std::memcpy(temp, my_bag, bag_size * sizeof(T));
-
-  bag_size = x.bag_size;
-  my_bag = (T*) realloc(my_bag, bag_size * sizeof(T));
-  std::memcpy(my_bag, x.my_bag, bag_size * sizeof(T));
-
-  x.bag_size = temp_size;
-  x.my_bag = (T*) realloc(x.my_bag, x.bag_size * sizeof(T));
-  std::memcpy(x.my_bag, temp, x.bag_size * sizeof(T));
+    std::swap(bag_size, x.bag_size); // exchange resources between *this and other
+    std::swap(my_bag, x.my_bag);
 }
 
 // add an item to the bag
@@ -63,6 +46,7 @@ bool DynamicBag<T>::add(const T& item)
   if(typeid(T) != typeid(*my_bag)){
     return false;
   }
+  //reallocate and increment size, contents remain unchanged inside the bag
   my_bag = (T*) realloc(my_bag, ++bag_size * sizeof(T));
   *(my_bag+bag_size-1) = item; 
   return true;
@@ -76,8 +60,9 @@ bool DynamicBag<T>::remove(const T& item)
   if(typeid(T) != typeid(*my_bag) || isEmpty() || !contains(item)){
     return false;
   }
-  T temp[bag_size];
-  //only removing one, so index is minus 2
+  T* temp = (T*) malloc((bag_size-1)*sizeof(T));
+
+  //only removing one, so index is minus 2, as starting from the top, main index is already -1
   int j = bag_size-2;
   bool first_instance = true;
   for(int i = bag_size-1; i >= 0; i--){
@@ -88,8 +73,10 @@ bool DynamicBag<T>::remove(const T& item)
       j--;
     }
   }
+  //reallocate and decrement size
   my_bag = (T*) realloc(my_bag, --bag_size * sizeof(T));
   std::memcpy(my_bag, temp, bag_size * sizeof(T));
+  free(temp);
   return true;
 }
 
@@ -125,6 +112,7 @@ bool DynamicBag<T>::contains(const T& item) const
 // clear the bag contents
 template<typename T>
 void DynamicBag<T>::clear(){
+  //clear memory of my_bag, reset size, reallocate empty bag
   free(my_bag);
   bag_size = 0;
   my_bag = (T*) malloc(bag_size*sizeof(T));

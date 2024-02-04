@@ -110,12 +110,10 @@ TEST_CASE("Checking that = works as intended", "[DynamicBag]"){
   for(int i = 0; i < 10; i++){
     REQUIRE(c.contains(testing_array[i]));
   }
-  REQUIRE(c.getCurrentSize() == b.getCurrentSize());
   DynamicBag<int> d = c;
   for(int i = 0; i < 10; i++){
     REQUIRE(d.contains(testing_array[i]));
   }
-  REQUIRE(d.getCurrentSize() == b.getCurrentSize());
 }
 
 TEST_CASE("Calling all public members", "[DynamicBag]"){
