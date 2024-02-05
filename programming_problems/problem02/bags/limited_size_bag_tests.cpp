@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-
+#include <iostream>
 #include "limited_size_bag.hpp"
 
 
@@ -10,6 +10,10 @@ int testing_array_two[10] = {0,0,-300,7,0,0,0,0,9,10};
 // force template expansion for ints
 template class LimitedSizeBag<int>;
 
+TEST_CASE("Checking that max size is 100", "[DynamicBag]"){
+  int x = LimitedSizeBag<int>::maxsize;
+  REQUIRE(x == 100);
+}
 
 TEST_CASE("Checking that add works as intended", "[DynamicBag]"){
   LimitedSizeBag<int> b;

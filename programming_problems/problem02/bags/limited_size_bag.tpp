@@ -10,8 +10,7 @@ LimitedSizeBag<T>::LimitedSizeBag() {
 template<typename T>
 bool LimitedSizeBag<T>::add(const T& item)
 {
-  //require type match
-  if(typeid(T) != typeid(*my_bag) || getCurrentSize() == maxsize){
+  if(getCurrentSize() == maxsize){
     return false;
   }
   //set item, increment size
@@ -24,8 +23,8 @@ bool LimitedSizeBag<T>::add(const T& item)
 template<typename T>
 bool LimitedSizeBag<T>::remove(const T& item)
 {
-  //require type match, also can't remove from an empty bag and should contain said item
-  if(typeid(T) != typeid(*my_bag) || isEmpty() || !contains(item)){
+  //can't remove from an empty bag and should contain said item
+  if(isEmpty() || !contains(item)){
     return false;
   }
   T temp[bag_size];
