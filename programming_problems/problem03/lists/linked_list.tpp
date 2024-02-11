@@ -27,6 +27,7 @@ LinkedList<T>::LinkedList(const LinkedList<T> &x)
   head = nullptr;
   if (x.head != nullptr)
   {
+    head = nullptr;
     Node<T> *x_position = x.head;
     Node<T> *main_position = nullptr;
 
@@ -38,6 +39,7 @@ LinkedList<T>::LinkedList(const LinkedList<T> &x)
       if (head == nullptr)
       {
         // Empty case, set head to the node of the first item of x
+
         head = item_node;
         main_position = head;
       }
