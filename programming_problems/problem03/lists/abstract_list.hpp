@@ -3,6 +3,7 @@
 #define _ABSTRACT_LIST_HPP_
 
 #include <cstdlib>
+#include <cstring>
 
 template <typename T>
 class AbstractList

@@ -45,7 +45,8 @@ public:
   void setEntry(std::size_t position, const T& newValue);
 
 private:
-
+    size_t array_size;
+    T* my_array;
   // TODO
   
 };

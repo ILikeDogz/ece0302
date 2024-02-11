@@ -45,7 +45,7 @@ public:
   void setEntry(std::size_t position, const T& newValue);
 
 private:
-
+  Node<T>* head;
   //TODO
   
 };
