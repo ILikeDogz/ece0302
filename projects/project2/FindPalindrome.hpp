@@ -8,7 +8,8 @@ class FindPalindrome{
 
 private:
 	// private stuff that you define and implement goes here...
-	
+	std::vector<std::string> my_words; //vector of strings containing all added words
+	std::vector<std::vector<std::string>> my_palindromes; //vector of vectors containing all palindromes
 	// ...
 	
 	// private stuff that you are given or is specified in the project
@@ -27,6 +28,7 @@ private:
 	  do not want to use a recursive version for this test (as it is 
 	  inefficient). You may change the signature of this function. */
 	bool isPalindrome(std::string currentString) const;
+
 	
 public:
 	/** Constructor for the FindPalindrome object. */
