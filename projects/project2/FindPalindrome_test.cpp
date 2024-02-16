@@ -78,8 +78,11 @@ TEST_CASE("Test cutTest2", "[FindPalindrome]")
 	std::vector<std::string> valid2 = {"JImmY", "TtiMMy", "bObS", "GgAaRYy", "Marshall", "Jom"};
 	std::vector<std::string> invalid1 = {"ccc", "bbb"};		  // not inside invalid2
 	std::vector<std::string> invalid2 = {"eee", "ggg", "hh"}; // not inside invalid1
+	std::vector<std::string> same1 = {"aa", "aaa"};	
+	std::vector<std::string> same2 = {"aa", "aaa"}; 
 	REQUIRE(b.cutTest2(empty, empty));
 	REQUIRE(b.cutTest2(valid1, valid2));
+	REQUIRE(b.cutTest2(same1, same2));
 	REQUIRE_FALSE(b.cutTest2(invalid1, invalid2));
 }
 
