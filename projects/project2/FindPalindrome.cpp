@@ -42,8 +42,8 @@ void FindPalindrome::recursiveFindPalindromes(std::vector<std::string> candidate
 	{
 		return;
 	}
-	if (currentStringVector.empty()) // triggers after a full permutation vector is made
-	{
+	if (currentStringVector.empty())
+	{ // triggers after a permutation is made
 		std::string temp_string = stringVectorToString(candidateStringVector);
 		if (isPalindrome(temp_string))
 		{
@@ -129,7 +129,7 @@ bool FindPalindrome::cutTest1(const std::vector<std::string> &stringVector)
 	int odd_count = 0;
 	for (char my_character : the_alphabet)
 	{
-		if (my_map[my_character] % 2 == 1) // check every character in the alphabet, faster than going through every character and string in the string vector again, most of the time
+		if (my_map[my_character] % 2 == 1) // check every character in the alphabet, faster than going through every string in the string vector again, most of the time
 		{
 			odd_count++;
 		};
@@ -194,6 +194,20 @@ bool FindPalindrome::add(const std::string &value)
 
 bool FindPalindrome::add(const std::vector<std::string> &stringVector)
 {
+	//using a map to check for duplicates inside the stringVector
+	std::map<std::string, int> my_map;				   // hashmap is set to the default of the type it's converting to, in this case 0
+	for (std::string my_string : stringVector) // iterate through every string in the vector
+	{
+		convertToLowerCase(my_string);
+		my_map[my_string]++;
+	}
+	for (std::string my_string : stringVector) // iterate through every string in the vector
+	{
+		convertToLowerCase(my_string);
+		if(my_map[my_string] > 1){
+			return false;
+		}
+	}
 	for (std::string my_string : stringVector)
 	{
 		for (char my_character : my_string)
@@ -203,18 +217,20 @@ bool FindPalindrome::add(const std::vector<std::string> &stringVector)
 				return false;
 			}
 		}
-		convertToLowerCase(my_string);
+		std::string lower_case_string = my_string; // don't alter my_string, but still want to only compare lowercases
+		convertToLowerCase(lower_case_string);
 		for (std::string my_other_string : my_words) // confirm no repetition
 		{
 			convertToLowerCase(my_other_string);
-			if (my_other_string == my_string)
+			if (my_other_string == lower_case_string)
 			{
 				return false;
 			}
 		}
 	}
-	for(std::string my_string : stringVector){
-		my_words.push_back(my_string); // add the string, after checking no duplicates and valid characters
+	for (std::string my_string : stringVector)
+	{
+		my_words.push_back(my_string); // add the string, after checking each character is contained in the alphabet
 	}
 	my_palindromes.clear();
 	std::vector<std::string> temp;

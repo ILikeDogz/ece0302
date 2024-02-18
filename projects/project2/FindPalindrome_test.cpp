@@ -100,3 +100,14 @@ TEST_CASE("Test toVector and recursiveFindPalindromes", "[FindPalindrome]")
 		REQUIRE(std::find(b.toVector().begin(), b.toVector().end(), c[i]) != b.toVector().end()); 
 	}
 }	
+TEST_CASE("Test Single Letter Combination", "[FindPalindrome]")
+{
+	FindPalindrome b;
+	std::vector<std::string> a = {"a", "b"};
+	b.add(a);
+	REQUIRE(b.number() == 0);
+	b.clear();
+	b.add("a");
+	REQUIRE(b.number() == 1);
+}	
+
