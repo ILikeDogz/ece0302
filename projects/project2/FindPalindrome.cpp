@@ -165,6 +165,9 @@ bool FindPalindrome::cutTest2(const std::vector<std::string> &stringVector1,
 
 bool FindPalindrome::add(const std::string &value)
 {
+	if(value.empty()){
+		return false;
+	}
 	for (char my_character : value)
 	{
 		if (!std::isalpha(my_character)) // check to make sure character is contained in the alphabet
@@ -194,10 +197,16 @@ bool FindPalindrome::add(const std::string &value)
 
 bool FindPalindrome::add(const std::vector<std::string> &stringVector)
 {
+	if(stringVector.empty()){
+		return false;
+	}
 	//using a map to check for duplicates inside the stringVector
 	std::map<std::string, int> my_map;				   // hashmap is set to the default of the type it's converting to, in this case 0
 	for (std::string my_string : stringVector) // iterate through every string in the vector
 	{
+		if(my_string.empty()){
+			return false;
+		}
 		convertToLowerCase(my_string);
 		my_map[my_string]++;
 	}

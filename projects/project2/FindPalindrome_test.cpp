@@ -29,12 +29,21 @@ TEST_CASE("Test clear", "[FindPalindrome]")
 TEST_CASE("Test add", "[FindPalindrome]")
 {
 	FindPalindrome b;
-
 	REQUIRE(b.add("a"));
+	REQUIRE(b.number() == 1);
 	REQUIRE(b.add("AA"));
+	REQUIRE(b.number() == 2);
 	REQUIRE(b.add("AaA"));
 	REQUIRE(b.number() == 6);
+
+	REQUIRE_FALSE(b.add("a")); //adding a repeat should fail
+	REQUIRE(b.number() == 6); //should not change size
+
+	REQUIRE(b.add("bbb"));
+	REQUIRE(b.add("c"));
+	REQUIRE(b.number() == 0); //can no longer create a palindrome
 }
+
 
 TEST_CASE("Test add (vector)", "[FindPalindrome]")
 {
@@ -42,13 +51,44 @@ TEST_CASE("Test add (vector)", "[FindPalindrome]")
 	std::vector<std::string> a = {"a", "aA", "aAA", "aAAA"};
 	REQUIRE(b.add(a));
 	REQUIRE(b.number() == 24);
+	
+	REQUIRE_FALSE(b.add("a")); //adding a repeat should fail
+	REQUIRE(b.number() == 24);
+	std::vector<std::string> c = {"b", "bB", "bBB", "bBBB", "a"}; //should fail as "a" already exists inside the vector
+	REQUIRE_FALSE(b.add(c));
+	REQUIRE(b.number() == 24);
+
+	std::vector<std::string> d = {"aAAAA", "aAAAAA"}; //adding more vector
+	REQUIRE(b.add(d));
+	REQUIRE(b.number() == 720);
+
+	std::vector<std::string> invalidate_pallindrome = {"bb", "b"};
+	REQUIRE(b.add(invalidate_pallindrome)); //can't form a palindrome, number should go to 0
+	REQUIRE(b.number() == 0);
+	b.clear();
+
+	REQUIRE(b.number() == 0);
+	std::vector<std::string> e = {"a", "aA", "aAA", "aAAA", "a"}; //repeat contained inside vector
+	REQUIRE_FALSE(b.add(e)); //should fail
+	REQUIRE(b.number() == 0); //no palindromes should exist
+}
+
+TEST_CASE("Test add empty", "[FindPalindrome]")
+{
+	FindPalindrome b;
+	REQUIRE_FALSE(b.add(""));
+	b.clear();
+	std::vector<std::string> a = {};
+	REQUIRE_FALSE(b.add(a));
+	std::vector<std::string> c = {""};
+	REQUIRE_FALSE(b.add(c));
 }
 
 TEST_CASE("Test adding invalid words, add (string) and add(vector)", "[FindPalindrome]")
 {
 	FindPalindrome b;
 	REQUIRE(b.add("kayak"));
-	REQUIRE(!b.add("kayak1"));
+	REQUIRE_FALSE(b.add("kayak1"));
 	std::vector<std::string> valid = {"a", "aA", "aAA", "aAAA"};
 	std::vector<std::string> invalid = {"b", "bB", "b1B", "bBBB"};
 	std::vector<std::string> invalid2 = {"b", "bB", "b,B", "bBBB"};
@@ -104,10 +144,13 @@ TEST_CASE("Test Single Letter Combination", "[FindPalindrome]")
 {
 	FindPalindrome b;
 	std::vector<std::string> a = {"a", "b"};
+	REQUIRE(b.number() == 0);
 	b.add(a);
 	REQUIRE(b.number() == 0);
 	b.clear();
 	b.add("a");
 	REQUIRE(b.number() == 1);
+	b.add("b"); //no longer pallindrome
+	REQUIRE(b.number() == 0);
 }	
 
