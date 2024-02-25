@@ -61,6 +61,22 @@ TEST_CASE("Test case: Descending to Ascending", "sorting"){
   }  
 }
 
+
+TEST_CASE("Test case: Descending to Ascending, Double", "sorting"){
+
+  LinkedList<double> lst;
+
+  for(double i = 100; i >= 0; i--){
+    lst.insert(100-i,i/2); //creates a list in descending order
+  }
+
+  LinkedList<double> sorted = sort(lst);
+
+  for(double i = 0; i <= 100; i++){
+    REQUIRE(sorted.getEntry(i) == i/2);
+  }  
+}
+
 TEST_CASE("Test case: all equal", "sorting"){
 
   LinkedList<int> lst;
@@ -104,4 +120,24 @@ TEST_CASE("Test case: Sorting Multiple Times", "sorting"){
   for(int i = 101; i <= 200; i++){
     REQUIRE(sorted2.getEntry(i) == i);
   }  
+}
+
+TEST_CASE("Test case: Character", "sorting"){
+
+  LinkedList<char> lst;
+
+  lst.insert(0, 'c');
+
+  lst.insert(1, 'a');
+
+  lst.insert(2, 'z');
+  lst.insert(3, 'b');
+
+  LinkedList<char> sorted = sort(lst);
+
+  REQUIRE(sorted.getEntry(0) == 'a');
+  REQUIRE(sorted.getEntry(1) == 'b');
+  REQUIRE(sorted.getEntry(2) == 'c');
+  REQUIRE(sorted.getEntry(3) == 'z');
+
 }
