@@ -7,6 +7,7 @@
 
 #include <stdexcept>
 #include "Node.hpp"
+#include <memory>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ template<class ItemType>
 class Stack
 {
 private:
-	Node<ItemType>* headPtr; // Pointer to first node
+	std::shared_ptr<Node<ItemType>> headPtr; // Pointer to first node
 	int currentSize;         // Current depth of the stack
 
 public:

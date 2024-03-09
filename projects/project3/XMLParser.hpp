@@ -9,6 +9,7 @@
 #include <string>
 #include "Bag.hpp"
 #include "Stack.hpp"
+#include <memory>
 
 /** enum definition for possible string token types. */
 typedef enum {START_TAG=1, END_TAG, EMPTY_TAG, CONTENT, DECLARATION} StringTokenType;
@@ -23,9 +24,9 @@ class XMLParser
 {
 private:
 	/** Bag to store the XML element names. Uses the book's Bag implementation. */
-	Bag<std::string>* elementNameBag;
+	std::shared_ptr<Bag<std::string>> elementNameBag;
 	/** Stack to store XML tag names while parsing. Uses your stack implementation. */
-	Stack<std::string>* parseStack;
+	std::shared_ptr<Stack<std::string>> parseStack;
 	/** Vector to store the tokenized input string and the token types */
 	std::vector<TokenStruct> tokenizedInputVector;
   	/** bool indicating if tokenizedInput was called */

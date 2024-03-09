@@ -20,15 +20,7 @@ Stack<ItemType>::Stack()
 template<class ItemType>
 Stack<ItemType>::~Stack()
 {
-	Node<ItemType> *position = headPtr;
-	Node<ItemType> *next = nullptr;
-
-  	while (position != nullptr)
-  		{ // traverse the links and delete
-    	next = position->getNext();
-    	delete position;
-    	position = next;
-  	}
+	//no destructor needs to be called, due to smart pointers automatically deallocating
 }  // end destructor
 
 // TODO: Implement the isEmpty method here
@@ -49,8 +41,8 @@ int Stack<ItemType>::size() const
 template<class ItemType>
 bool Stack<ItemType>::push(const ItemType& newItem)
 {
-	Node<ItemType> *item_node = new Node<ItemType>(newItem, headPtr);
-	headPtr = item_node;
+	std::shared_ptr<Node<ItemType>> nextNodePtr = std::make_shared<Node<ItemType>>(newItem, headPtr); // alternate code
+	headPtr = nextNodePtr;          // New node is now first node
 	currentSize++;
 	return true;
 }  // end push
@@ -72,26 +64,18 @@ bool Stack<ItemType>::pop()
 	if(currentSize <= 0 || headPtr == nullptr){
 		return false;
 	}
-	Node<ItemType> *temp = headPtr;
-	headPtr = headPtr->getNext();
-	delete temp;
+	//move to the next, the old is automatically deleted because of smart pointer
+	headPtr = std::move(headPtr->getNext()); 
 	currentSize--;
-	return false;
+    return true;
 }  // end pop
 
 // TODO: Implement the clear method here
 template<class ItemType>
 void Stack<ItemType>::clear()
 {
-	Node<ItemType> *position = headPtr;
-	Node<ItemType> *next = nullptr;
-
-  	while (position != nullptr)
-  		{ // traverse the links and delete
-    	next = position->getNext();
-    	delete position;
-    	position = next;
-  	}
+	//continue to pop, until headPtr is null
+	while(pop());
 	currentSize = 0;
 	headPtr = nullptr;
 }  // end clear

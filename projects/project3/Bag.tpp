@@ -28,7 +28,7 @@ bool Bag<ItemType>::add(const ItemType& newEntry)
 {
 	// Add to beginning of chain: new node references rest of chain;
 	// (headPtr is null if chain is empty)
-	Node<ItemType>* nextNodePtr = new Node<ItemType>(newEntry, headPtr); // alternate code
+	std::shared_ptr<Node<ItemType>> nextNodePtr = std::make_shared<Node<ItemType>>(newEntry, headPtr); // alternate code
 
 	headPtr = nextNodePtr;          // New node is now first node
 	itemCount++;
@@ -39,25 +39,18 @@ bool Bag<ItemType>::add(const ItemType& newEntry)
 template<class ItemType>
 void Bag<ItemType>::clear()
 {
-	Node<ItemType>* nodeToDeletePtr = headPtr;
-	while (headPtr != nullptr)
-	{
-		headPtr = headPtr->getNext();
-		// Return node to the system
-		nodeToDeletePtr->setNext(nullptr);
-		delete nodeToDeletePtr;
-		nodeToDeletePtr = headPtr;
-	}  // end while
-	// headPtr is nullptr; nodeToDeletePtr is nullptr
-
+	while(headPtr) {
+		//moves headPtr until it is nullptr
+     	headPtr = std::move(headPtr->getNext());
+    }
 	itemCount = 0;
 }  // end clear
 
 template<class ItemType>
-Node<ItemType>* Bag<ItemType>::getPointerTo(const ItemType& target) const
+std::shared_ptr<Node<ItemType>> Bag<ItemType>::getPointerTo(const ItemType& target) const
 {
 	bool found = false;
-	Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>> curPtr = headPtr;
 
 	while (!found && (curPtr != nullptr))
 	{
@@ -81,7 +74,7 @@ int Bag<ItemType>::getFrequencyOf(const ItemType& anEntry) const
 {
 	int frequency = 0;
 	int counter = 0;
-	Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>> curPtr = headPtr;
 	while ((curPtr != nullptr) && (counter < itemCount))
 	{
 		if (anEntry == curPtr->getItem())
@@ -100,7 +93,7 @@ template<class ItemType>
 std::vector<ItemType> Bag<ItemType>::toVector() const
 {
 	std::vector<ItemType> bagContents;
-	Node<ItemType>* curPtr = headPtr;
+	std::shared_ptr<Node<ItemType>>  curPtr = headPtr;
 	int counter = 0;
 	while ((curPtr != nullptr) && (counter < itemCount))
 	{
@@ -115,6 +108,6 @@ std::vector<ItemType> Bag<ItemType>::toVector() const
 template<class ItemType>
 Bag<ItemType>::~Bag()
 {
-	   clear();
+	//no destructor needs to be called, due to smart pointers automatically deallocating
 }  // end destructor
 
