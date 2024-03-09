@@ -28,7 +28,11 @@ private:
 	Stack<std::string>* parseStack;
 	/** Vector to store the tokenized input string and the token types */
 	std::vector<TokenStruct> tokenizedInputVector;
-  
+  	/** bool indicating if tokenizedInput was called */
+	bool tokened_input;
+	/** bool indicating if parseTokenizedInput was called */
+	bool parsed_input;
+
   // You can add or change the private fields.
 
 public:
