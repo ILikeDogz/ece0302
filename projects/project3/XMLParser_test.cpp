@@ -80,7 +80,7 @@ TEST_CASE( "Test Stack pop", "[ADT Stack]" )
 		REQUIRE(intStack.pop());
 		}
 		//fail on empty stack
-		REQUIRE_THROWS(intStack.pop());
+		REQUIRE_FALSE(intStack.pop());
 }
 
 TEST_CASE( "Test XMLParser tokenizeInputString Valid Strings", "[XMLParser]" )
