@@ -63,6 +63,7 @@ bool Stack<ItemType>::pop()
 {
 	if(currentSize <= 0 || headPtr == nullptr){
 		return false;
+		throw std::logic_error("Empty Stack");
 	}
 	//move to the next, the old is automatically deleted because of smart pointer
 	headPtr = std::move(headPtr->getNext()); 
@@ -75,8 +76,10 @@ template<class ItemType>
 void Stack<ItemType>::clear()
 {
 	//continue to pop, until headPtr is null
-	while(pop());
+	while(headPtr) {
+		//moves headPtr until it is nullptr
+     	headPtr = std::move(headPtr->getNext());
+    }
 	currentSize = 0;
-	headPtr = nullptr;
 }  // end clear
 

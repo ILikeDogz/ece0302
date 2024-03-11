@@ -21,7 +21,7 @@ XMLParser::XMLParser()
 // TODO: Implement the destructor here
 XMLParser::~XMLParser()
 {
-	//no destructor needs to be called, due to smart pointers automatically deallocating
+	// no destructor needs to be called, due to smart pointers automatically deallocating
 } // end destructor
 
 // TODO: Implement the tokenizeInputString method
@@ -49,12 +49,15 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 		return false;
 	}
 	size_t delimiters = 0;
-	for(char my_char : my_string){
-		if(my_char == '<' || my_char == '>'){
+	for (char my_char : my_string)
+	{
+		if (my_char == '<' || my_char == '>')
+		{
 			delimiters++;
 		}
 	}
-	if (delimiters % 2){ //odd number of delimiters is bad
+	if (delimiters % 2)
+	{ // odd number of delimiters is bad
 		return false;
 	}
 	while (index < my_string.length())
@@ -128,11 +131,11 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			}
 			// at this point, name has no end tags, or invalid
 			size_t temp = my_name.length();
-			for (size_t i = 0; i < temp; i++)
+			for (size_t space_index = 0; space_index < temp; space_index++)
 			{
-				if (std::isspace(my_name[i]))
+				if (std::isspace(my_name[space_index]))
 				{ // locates space and creates a substring at point of space
-					my_name = my_name.substr(0, i);
+					my_name = my_name.substr(0, space_index);
 					break;
 				}
 			}
@@ -148,7 +151,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			for (char my_char : invalid_characters)
 			{
 				if (my_name.find(my_char) != std::string::npos)
-				{ 
+				{
 					// invalid if any of the invalid chars are found
 					return false;
 				}
@@ -172,19 +175,20 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			{
 				next_delimiter = my_string.length(); // we hit an end
 			}
-			size_t i = index;
-			for (i; i < next_delimiter; i++)
+			size_t space_index = index;
+			for (space_index; space_index < next_delimiter; space_index++)
 			{
-				if (std::isspace(my_string[i]))
-				{ 
-					// removes spaces from content
-					my_token.tokenString = my_string.substr(index, i - index);
+				if (std::isspace(my_string[space_index]))
+				{
+					// locates where first space is
 					break;
 				}
 			}
-			my_token.tokenString = my_string.substr(index, i - index);
-			for(char my_char : my_token.tokenString){
-				if(my_char == '<' || my_char == '>'){ //should not contain either delimiter
+			my_token.tokenString = my_string.substr(index, space_index - index);
+			for (char my_char : my_token.tokenString)
+			{
+				if (my_char == '<' || my_char == '>')
+				{ // should not contain either delimiter
 					return false;
 				}
 			}
@@ -202,31 +206,31 @@ bool XMLParser::parseTokenizedInput()
 {
 	bool end_of_document = false;
 	parseStack->clear();
-	//parseStack will only be empty at the start or end of the document
+	// parseStack will only be empty at the start or end of the document
 	elementNameBag->clear();
-	if (!tokened_input || (tokenizedInputVector[0].tokenString == "xml" && tokenizedInputVector[0].tokenType == EMPTY_TAG))
+	if (!tokened_input)
 	{
-		//xml declaration only allowed at the start of document, there should be attributes
+		//other function shoudl've been called
 		return false;
 	}
 	for (size_t i = 0; i < tokenizedInputVector.size(); i++)
 	{
-		if(end_of_document){
-			//shouldn't have anything after the end of the document, so if we are continuing it is an issue
-			return false; 
+		if (end_of_document)
+		{
+			// shouldn't have anything after the end of the document, so if we are continuing it is an issue
+			return false;
 		}
 		TokenStruct my_token = tokenizedInputVector[i];
 		if (my_token.tokenType == CONTENT && parseStack->isEmpty())
-		{ 
+		{
 			// invalid content without container
 			return false;
 		}
 		else if (my_token.tokenType == START_TAG)
-		{ 
+		{
 			// add start tag to beginning of the stack
 			parseStack->push(my_token.tokenString);
 			elementNameBag->add(my_token.tokenString);
-
 		}
 		else if (my_token.tokenType == END_TAG)
 		{ // make sure it matches with the start tag that should be on top of the stack
@@ -240,16 +244,19 @@ bool XMLParser::parseTokenizedInput()
 		{
 			elementNameBag->add(my_token.tokenString);
 		}
-		else if (my_token.tokenType == DECLARATION){
-			//parseStack will only be empty at the start or end of the document, and adding after the end is already accounted for
-			if (!parseStack->isEmpty() && my_token.tokenString.substr(0, 3) == "xml"){
-				//xml declaration only allowed at the start of document, there should be attributes
+		else if (my_token.tokenType == DECLARATION)
+		{
+			// parseStack will only be empty at the start or end of the document, and adding after the end is already accounted for
+			if (!parseStack->isEmpty() && my_token.tokenString.substr(0, 3) == "xml")
+			{
+				// xml declaration only allowed at the start of document, there should be attributes
 				return false;
 			}
-			continue; //if its a declaration skip the end of document check
+			continue; // if its a declaration skip the end of document check
 		}
-		//if stack is empty then there is no root holding anything together and we are at the end
-		if(parseStack->isEmpty()){
+		// if stack is empty then there is no root holding anything together and we are at the end
+		if (parseStack->isEmpty())
+		{
 			end_of_document = true;
 		}
 	}
@@ -277,7 +284,8 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 // TODO: Implement the containsElementName method
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
-	if (tokened_input && parsed_input){
+	if (tokened_input && parsed_input)
+	{
 		return elementNameBag->contains(inputString);
 	}
 	throw std::logic_error("did not call tokenizedInputString and parseTokenizedInput");
@@ -286,7 +294,8 @@ bool XMLParser::containsElementName(const std::string &inputString) const
 // TODO: Implement the frequencyElementName method
 int XMLParser::frequencyElementName(const std::string &inputString) const
 {
-	if (tokened_input && parsed_input){
+	if (tokened_input && parsed_input)
+	{
 		return elementNameBag->getFrequencyOf(inputString);
 	}
 	throw std::logic_error("did not call tokenizedInputString and parseTokenizedInput");
