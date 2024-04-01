@@ -109,6 +109,13 @@ int main(int argc, char *argv[])
       return EXIT_SUCCESS;
     }
   }
+  // Write solution image to file
+  try{
+    writeToFile(image, output_file);
+  }catch(std::runtime_error& my_error){
+    std::cerr<<"Error: failed to writeToFile()"<<my_error.what()<<std::endl;
+    return EXIT_FAILURE;
+  }
   std::cout<<"No Solution Found"<<std::endl;
   return EXIT_SUCCESS;
 }
