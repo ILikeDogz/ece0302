@@ -6,6 +6,7 @@
 
  void find_neighbors(int height, int width, int pos, int neighbors[], Image<Pixel> image){
   //neighbors[0] = previous row, neighbors[1] = next row, neighbors[2] = previous col, neighbors[3] = next col
+  //off sets for prev and next
   int row_offsets[4] = {-1, 1, 0, 0};
   int col_offsets[4] = {0, 0, -1, 1};
 
@@ -20,7 +21,7 @@
       neighbors[i] = -1; //invalid bounds
     }
     else {
-      neighbors[i] = new_row*width+new_col;
+      neighbors[i] = new_row*width+new_col; //convert row col data to single int
     }
   }
 }
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
 
   // Read input image from file
   Image<Pixel> image;
+  //error handling
   try{
     image = readFromFile(input_file);
   }catch(std::runtime_error& my_error){
@@ -53,42 +55,42 @@ int main(int argc, char *argv[])
   int red_found = 0;
   for(int row = 0; row < height; row++){
      for(int col = 0; col < width; col++){
-      bool is_red = image(row,col) == RED;
+      bool is_red = image(row,col) == RED; //check red
       if(is_red){
         start_position = row*width+col; //creates a unique single digit int that can be used to get the original values later
-        red_found++;
+        red_found++; //number of red pixels
       }
-      if(image(row, col) != RED && image(row, col) != WHITE && image(row, col) != BLACK){
+      if(image(row, col) != RED && image(row, col) != WHITE && image(row, col) != BLACK){ //check invalid colors
         std::cerr<<"Error: Invalid Color found inside Maze"<<std::endl;
         return EXIT_FAILURE;
       }
     }
   }
-  if(red_found == 0 || red_found > 1){
+  if(red_found == 0 || red_found > 1){ //should be equal to 1
     std::cerr<<"Error: Incorrect number of red pixels found"<<std::endl;
     return EXIT_FAILURE;
   }
 
   Queue<int, List<int>> my_queue;
 
-  my_queue.enqueue(start_position);
+  my_queue.enqueue(start_position); //begin queue
 
-  // auto q = new Queue();
-  // q.add(inital_pos);
   int my_neighbors[4] = {0, 0, 0, 0};
   bool visited[height*width];
   while(!my_queue.isEmpty()){
+    //get front, and remove front
     int current_position = my_queue.peekFront();
-    my_queue.dequeue();
+    my_queue.dequeue(); 
     find_neighbors(height, width, current_position, my_neighbors, image); //neighbors are now all stored in the array
+    //iterate through the neighbors
     for(int neighbor : my_neighbors){
       if(neighbor == -1){
         continue; //skip -1 as it means invalid neighbor
       } else{
         if(!visited[neighbor]){
-          my_queue.enqueue(neighbor);
+          my_queue.enqueue(neighbor); //add not visited position to queue
         }
-        visited[neighbor] = true;
+        visited[neighbor] = true; //neighbor unless invalid, will be a unique int
       }
     }
     //convert to row column data
