@@ -42,3 +42,26 @@ TEST_CASE("Testing all", "[queue]") {
   another_queue.dequeue();
   REQUIRE(another_queue.peekFront() == 62);
 }
+
+TEST_CASE("Testing all 2", "[queue]") {
+  Queue<int, List<int>> queue;
+
+  REQUIRE(queue.isEmpty());
+  for(int i = 0; i < 10; i++){
+    queue.enqueue(i);
+  }
+
+  REQUIRE(!queue.isEmpty());
+  REQUIRE(queue.peekFront() == 0);
+  Queue<int, List<int>> another_queue;
+  another_queue = queue;
+
+  REQUIRE(queue.peekFront() == another_queue.peekFront());
+  for(int i = 0; i < 10; i++){
+    REQUIRE(queue.peekFront() == i);
+    queue.dequeue();
+  }
+  REQUIRE(queue.isEmpty());
+  REQUIRE_THROWS(queue.dequeue());
+
+}
