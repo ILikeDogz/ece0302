@@ -1,5 +1,4 @@
 #include "binary_search_tree.hpp"
-#include <stack>
 
 template <typename KeyType, typename ItemType>
 BinarySearchTree<KeyType, ItemType>::BinarySearchTree()

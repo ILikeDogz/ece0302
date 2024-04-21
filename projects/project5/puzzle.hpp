@@ -1,7 +1,7 @@
 #ifndef PUZZLE_HPP
 #define PUZZLE_HPP
 
-#include <csdtint>
+#include <cstdint>
 #include <utility>
 #include <string>
 #include <sstream>
